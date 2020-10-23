@@ -19,7 +19,14 @@ contract("GeoBache", accounts => {
         it("should recognize positions within one unit of cache", () =>
             GeoBache.deployed()
                 .then(contract => contract.checkLocation(1, 100049,200001))
-                .then(local => {
-                    assert(local)
+                .then(isLocal => {
+                    assert(isLocal)
+            }));
+
+        it("should not recognize positions outside one unit of cache", () =>
+            GeoBache.deployed()
+                .then(contract => contract.checkLocation(1, 100048,200002))
+                .then(isLocal => {
+                    assert(!isLocal)
             }));
     });

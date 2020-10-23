@@ -33,8 +33,8 @@ contract GeoBache {
   function checkLocation(uint index, uint32 lat, uint32 long) public view returns(bool) {
     uint32 _lat = caches[index].lat;
     uint32 _long = caches[index].long;
-    if(lat >= _lat - 1 || lat <= _lat + 1) {
-        if(long >= _long - 1 || long <= _long + 1) {
+    if(lat >= _lat - 1 && lat <= _lat + 1) {
+        if(long >= _long - 1 && long <= _long + 1) {
             return true;
         } else {
             return false;
