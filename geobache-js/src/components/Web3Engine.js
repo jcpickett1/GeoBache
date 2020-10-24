@@ -7,12 +7,12 @@ class Web3Engine extends Component {
   constructor(props) {
     super(props)
     this.state ={
-      web3: {},
       contract: {},
-      accounts: [],
-      loc: {}
+      web3: {},
+      loc: {},
+      accounts: []
     }
-}
+  }
 
   componentDidMount = async () => {
     try {
@@ -36,6 +36,14 @@ class Web3Engine extends Component {
         deployedNetwork && deployedNetwork.address,
       );
 
+      var cacheEvent = instance.events.Cache([],(err, res) => {
+        console.log(res);
+        alert("Your Cache ID is: " + res.returnValues.index);
+      });
+      // cacheEvent.watch((err, res) => {
+      //   alert("Heck yah!");
+      // })
+
       navigator.geolocation.getCurrentPosition((res) => { this.setState({ loc: res }); });
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -55,20 +63,24 @@ class Web3Engine extends Component {
   };
 
   async submitLoc() {
-    let { contract, accounts, loc } = this.state;
-    console.log(contract,accounts,loc)
-    let test = await contract.methods.checkLocation(1, Math.trunc(loc.coords.latitude), Math.trunc(loc.coords.latitude)).call()
-    console.log(test)
-    // console.log(this.state);
+    let { contract, loc } = this.state;
+    let id = document.getElementById("zooper").value;
+    console.log(id)
+    let test = await contract.methods.checkLocation( id, Math.trunc(loc.coords.latitude), Math.trunc(loc.coords.latitude)).call()
+    if(test) {
+      alert('You visited cache ' + id + '!');
+    } else {
+      alert('You don\'t appear to be near cache ' + id);
+    }
   }
 
-  register() {
+  async register() {
     let { contract, accounts, loc } = this.state;
-    let geo
-    navigator.geolocation.getCurrentPosition((res) => { geo = res })
-    console.log(contract,accounts,loc)
-    contract.methods.register( Math.trunc(loc.coords.latitude), Math.trunc(loc.coords.latitude)).send({ from: accounts[0] })
-    // console.log(this.state);
+    let info = contract.methods.register( Math.trunc(loc.coords.latitude), Math.trunc(loc.coords.latitude)).send({ from: accounts[0] })
+      .then((resp) => {
+        console.log(resp);
+      })
+    console.log(info);
   }
 
   render = () => {
@@ -77,6 +89,7 @@ class Web3Engine extends Component {
       <div>
         {this.props.children}
         <button onClick={ this.register.bind(this) }>ZOOP</button>
+        Check: <input id="zooper"></input>
         <button onClick={ this.submitLoc.bind(this) }>Zoop</button>
       </div>
       )
