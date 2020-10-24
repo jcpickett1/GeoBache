@@ -1,22 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
+import Locator from './components/Locator.js'
+import Web3Engine from './components/Web3Engine.js'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Web3Engine>
+          <Locator></Locator>
+        </Web3Engine>
       </header>
     </div>
   );
