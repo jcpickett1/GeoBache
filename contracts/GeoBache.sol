@@ -10,6 +10,9 @@ contract GeoBache {
   }
   mapping(uint => Coords) public caches;
   Coords[] coordinateList;
+  event Cache(
+    uint index
+  );
 
   modifier restricted() {
     require(
@@ -19,11 +22,12 @@ contract GeoBache {
     _;
   }
 
-  function register(uint24 lat, uint24 long) public restricted returns(bool) {
+  function register(uint24 lat, uint24 long) public restricted returns(uint) {
     Coords memory newCoords = Coords(lat, long);
     coordinateList.push(newCoords);
     caches[coordinateList.length] = newCoords;
-    return true;
+    emit Cache(coordinateList.length);
+    return coordinateList.length;
   }
 
   function lookUp(uint index) public view restricted returns(Coords memory coordinates) {

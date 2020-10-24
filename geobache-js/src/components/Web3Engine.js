@@ -27,7 +27,7 @@ class Web3Engine extends Component {
       console.log(accounts)
 
       // Get the contract instance.
-      const networkId = 1603546840646
+      const networkId = await web3.eth.net.getId();
       const deployedNetwork = GeoBache.networks[networkId];
       console.log(networkId)
 
@@ -35,6 +35,7 @@ class Web3Engine extends Component {
         GeoBache.abi,
         deployedNetwork && deployedNetwork.address,
       );
+      console.log(instance)
 
       var cacheEvent = instance.events.Cache([],(err, res) => {
         console.log(res);
